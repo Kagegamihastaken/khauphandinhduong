@@ -17,7 +17,17 @@ set(LOGGING_ENABLE OFF)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Static Libraries" FORCE)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 include(FetchContent)
-#dependency
+
+set(FETCHCONTENT_QUIET OFF CACHE BOOL "Show download progress" FORCE)
+
+#dependency project
+FetchContent_Declare(physfs
+        GIT_REPOSITORY https://github.com/icculus/physfs.git
+        GIT_TAG release-3.2.0
+        GIT_SHALLOW ON
+        GIT_PROGRESS ON
+        SYSTEM
+)
 FetchContent_Declare(cpptrace
         GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
         GIT_TAG v1.0.2
@@ -32,6 +42,20 @@ FetchContent_Declare(fmt
         GIT_PROGRESS ON
         SYSTEM
 )
+FetchContent_Declare(highs
+        GIT_REPOSITORY https://github.com/ERGO-Code/HiGHS.git
+        GIT_TAG        v1.15.1 # Or replace with 'master' / desired version release tag
+        GIT_SHALLOW ON
+        GIT_PROGRESS ON
+        SYSTEM
+)
+FetchContent_Declare(JSON
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG  v3.12.0
+        GIT_SHALLOW ON
+        GIT_PROGRESS ON
+        SYSTEM
+)
 FetchContent_Declare(Boost
         GIT_REPOSITORY https://github.com/boostorg/boost.git
         GIT_TAG boost-1.88.0
@@ -39,12 +63,12 @@ FetchContent_Declare(Boost
         GIT_PROGRESS ON
         SYSTEM
 )
-message("Making dependencies available...")
-FetchContent_MakeAvailable(cpptrace fmt)
+set(FAST_BUILD ON CACHE INTERNAL "")
 
 set(BOOST_INCLUDE_LIBRARIES type_index unordered)
 set(BOOST_ENABLE_CMAKE ON)
-FetchContent_MakeAvailable(Boost)
+FetchContent_MakeAvailable(physfs cpptrace fmt highs JSON Boost)
+
 #source project
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/config/config.h.in
@@ -74,8 +98,10 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-        Qt6::Widgets cpptrace::cpptrace fmt::fmt Boost::type_index
-        Boost::unordered)
+        Qt6::Widgets highs::highs cpptrace::cpptrace fmt::fmt
+        Boost::type_index Boost::unordered physfs-static
+        nlohmann_json::nlohmann_json
+)
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -87,7 +113,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 if(WIN32)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE winmm gdi32 user32 shell32 ole32 uuid)
     if(MINGW)
-        target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++ -flto)
+        target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++ -flto -pthread)
         if (NOT DEVELOPMENT_BUILD)
             target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -Wl,-subsystem,windows)
         endif()
