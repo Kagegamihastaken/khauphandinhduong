@@ -28,12 +28,12 @@ int WinMain(int argc, char** argv) {
     MFCPP::Handler::HandlerInit();
     int exit_code = 0;
     CPPTRACE_TRY {
+        MFCPP::Log::SuccessPrint(fmt::format("Version: {}", PROJECT_VERSION));
         MFCPP::IO::Init();
         MFCPP::Database::Init();
         test();
         QApplication app(argc, argv);
         app.setQuitOnLastWindowClosed(true);
-        MFCPP::Log::SuccessPrint(fmt::format("Version: {}", PROJECT_VERSION));
         QMainWindow window;
         Ui::TheTestWidget ui;
         ui.setupUi(&window);

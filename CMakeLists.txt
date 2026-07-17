@@ -3,6 +3,8 @@ cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0069 NEW)
 project(khauphandinhduong VERSION 0.2)
 
+add_compile_definitions(__USE_MINGW_ANSI_STDIO=1)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -126,7 +128,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 if(WIN32)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE winmm gdi32 user32 shell32 ole32 uuid dwmapi uxtheme setupapi version imm32)
     if(MINGW)
-        target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++ -flto)
+        target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
         if (NOT DEVELOPMENT_BUILD)
             target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -Wl,-subsystem,windows)
         endif()
