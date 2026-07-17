@@ -1,7 +1,7 @@
-#include "cores/handler.hpp"
+#include "common/handler.hpp"
 
 #include <csignal>
-#include "cores/Logging.hpp"
+#include "common/Logging.hpp"
 #include <fmt/format.h>
 #include <cpptrace/utils.hpp>
 

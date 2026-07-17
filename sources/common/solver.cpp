@@ -1,7 +1,7 @@
-#include "cores/solver.hpp"
+#include "common/solver.hpp"
 
 #include <Highs.h>
-#include "cores/logging.hpp"
+#include "common/logging.hpp"
 
 bool MFCPP::Solver::Solve(std::vector<int64_t>&vec, HighsModel &model) {
     Highs highs;
@@ -14,13 +14,15 @@ bool MFCPP::Solver::Solve(std::vector<int64_t>&vec, HighsModel &model) {
     return_status = highs.run();
     assert(return_status == HighsStatus::kOk);
     const HighsModelStatus& model_status = highs.getModelStatus();
+    bool return_value = false;
     switch (model_status) {
         case HighsModelStatus::kOptimal: {
             Log::SuccessPrint("Solver: Success Find Optimal Solution");
             const HighsSolution& solution = highs.getSolution();
             for (size_t i = 0; i < solution.col_value.size(); ++i)
                 vec.push_back(solution.col_value[i]);
-            return true;
+            return_value = true;
+            break;
         }
         case HighsModelStatus::kInfeasible: {
             Log::ErrorPrint("Solver: Model is infeasible");
@@ -39,13 +41,14 @@ bool MFCPP::Solver::Solve(std::vector<int64_t>&vec, HighsModel &model) {
             break;
         }
     }
-    return false;
+    highs.resetGlobalScheduler(true);
+    highs.releaseMemory();
+    return return_value;
     //double cost_ans = 0.0;
     //for (size_t i = 0; i < solution.col_value.size(); ++i) {
     //    cost_ans += solution.col_value[i] * model.lp_.col_cost_[i];
     //}
     //MFCPP::Log::InfoPrint(fmt::format("Cost: {}", cost_ans));
-    highs.resetGlobalScheduler(true);
 }
 
 void MFCPP::Solver::Generate(HighsModel &model) {

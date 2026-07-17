@@ -1,12 +1,14 @@
 #include <qapplication.h>
 #include <qmainwindow.h>
-#include "cores/logging.hpp"
+#include "common/logging.hpp"
 #include <config.h>
 #include <cpptrace/from_current.hpp>
-#include "cores/handler.hpp"
+#include "common/handler.hpp"
 #include <Highs.h>
-#include "cores/io.hpp"
-#include "cores/solver.hpp"
+#include "common/io.hpp"
+#include "common/solver.hpp"
+#include "ui_theTestWidget.h"
+#include "common/database.hpp"
 
 void test() {
     std::vector<int64_t> ans;
@@ -27,19 +29,24 @@ int WinMain(int argc, char** argv) {
     int exit_code = 0;
     CPPTRACE_TRY {
         MFCPP::IO::Init();
+        MFCPP::Database::Init();
         test();
         QApplication app(argc, argv);
+        app.setQuitOnLastWindowClosed(true);
         MFCPP::Log::SuccessPrint(fmt::format("Version: {}", PROJECT_VERSION));
         QMainWindow window;
+        Ui::TheTestWidget ui;
+        ui.setupUi(&window);
         window.setWindowTitle("Test");
         window.resize(800, 600);
         window.show();
         exit_code = app.exec();
+        MFCPP::Log::InfoPrint("Application event loop finished.");
     } CPPTRACE_CATCH (std::exception& e) {
         MFCPP::Log::ExceptionPrint(&e);
         MFCPP::Log::printCurrentTrace();
-        std::exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
     MFCPP::IO::Deinit();
-    std::exit(exit_code);
+    return 0;
 }

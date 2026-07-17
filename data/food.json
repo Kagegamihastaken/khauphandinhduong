@@ -1,0 +1,10 @@
+{
+	"data": [
+		{
+			"data_load": "food/pho_bo.json"
+		},
+		{
+			"data_load": "food/pho_ga.json"
+		}
+	]
+}
