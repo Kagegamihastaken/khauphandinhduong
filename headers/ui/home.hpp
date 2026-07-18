@@ -14,6 +14,7 @@ private slots:
     void tim_phuong_an();
     void remove_current_mon_chon();
     void add_new_mon_an();
+    void about();
 private:
     Ui::Home* ui;
     //for class numeric

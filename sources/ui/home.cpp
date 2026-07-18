@@ -7,6 +7,8 @@
 #include <model/HighsModel.h>
 #include <QMessageBox>
 
+#include "ui/about.hpp"
+
 HomeWidget::HomeWidget(QWidget *parent)
     : QWidget(parent), ui(new Ui::Home) {
     ui->setupUi(this);
@@ -15,6 +17,7 @@ HomeWidget::HomeWidget(QWidget *parent)
     connect(ui->tim_phuong_an_toi_uu, &QPushButton::clicked, this, &HomeWidget::tim_phuong_an);
     connect(ui->loai_bo_mon, &QPushButton::clicked, this, &HomeWidget::remove_current_mon_chon);
     connect(ui->them_mon, &QPushButton::clicked, this, &HomeWidget::add_new_mon_an);
+    connect(ui->about, &QPushButton::clicked, this, &HomeWidget::about);
     //Init window
     reset_value();
     p_min = 0.0;
@@ -31,6 +34,13 @@ HomeWidget::HomeWidget(QWidget *parent)
         int id = static_cast<int>(i.first);
         ui->them_mon_combo->addItem(name, id);
     }
+}
+
+void HomeWidget::about() {
+    auto* about = new AboutWidget(this);
+    about->setWindowFlag(Qt::Window);
+    about->setAttribute(Qt::WA_DeleteOnClose);
+    about->show();
 }
 
 void HomeWidget::reset_value() {
@@ -61,7 +71,7 @@ void HomeWidget::remove_current_mon_chon() {
         delete ui->mon_chon->takeItem(row);
     }
     else
-        QMessageBox::critical(this, "C\341\272\243nh b\303\241o", "B\341\272\241n ch\306\260a ch\341\273\215n m\303\263n \304\203n n\303\240o \304\221\341\273\203 x\303\263a");
+        QMessageBox::warning(this, "C\341\272\243nh b\303\241o", "B\341\272\241n ch\306\260a ch\341\273\215n m\303\263n \304\203n n\303\240o \304\221\341\273\203 x\303\263a");
 }
 
 void HomeWidget::calculate_dinhduong() {
@@ -90,7 +100,7 @@ void HomeWidget::calculate_dinhduong() {
 void HomeWidget::add_new_mon_an() {
     QVariant v = ui->them_mon_combo->currentData();
     if (!v.isValid()) {
-        QMessageBox::critical(this, "Error", "No food selected");
+        QMessageBox::warning(this, "C\341\272\243nh b\303\241o", "Kh\303\264ng c\303\263 m\303\263n \304\203n n\303\240o \304\221\306\260\341\273\243c ch\341\273\215n");
         return;
     }
     int idInt = v.toInt();
@@ -100,7 +110,7 @@ void HomeWidget::add_new_mon_an() {
     for (int i = 0; i < ui->mon_chon->count(); ++i) {
         QVariant itemData = ui->mon_chon->item(i)->data(Qt::UserRole);
         if (itemData.isValid() && itemData.toInt() == idInt) {
-            QMessageBox::critical(this, "C\341\272\243nh b\303\241o", "M\303\263n \304\203n \304\221\303\243 ch\341\273\215n ");
+            QMessageBox::warning(this, "C\341\272\243nh b\303\241o", "M\303\263n \304\203n \304\221\303\243 \304\221\306\260\341\273\243c ch\341\273\215n trong danh s\303\241ch");
             return;
         }
     }
@@ -123,9 +133,11 @@ void HomeWidget::tim_phuong_an() {
         }
     }
     MFCPP::Solver::Generate(model, MFCPP::Solver::Boundary{ui->calories_num_min->value(), ui->calories_num_max->value(), p_min, p_max, l_min, l_max, c_min, c_max});
-    int cnt = 0;
-    double cost = 0.0;
     if (MFCPP::Solver::Solve(ans, model)) {
+        QString output = "Th\303\240nh c\303\264ng t\303\254m th\341\272\245y ph\306\260\341\273\235ng \303\241n t\341\273\221i \306\260u ph\303\271 h\341\273\243p\n";
+        output += "* Th\341\273\261c \304\221\306\241n c\341\273\247a b\341\272\241n:\n";
+        int cnt = 0;
+        double cost = 0.0;
         constexpr auto food_entries = magic_enum::enum_entries<FoodID>();
         for (int i = 0; i < food_entries.size(); ++i) {
             if (food_entries[i].first == FoodID::FOOD_NULL) continue;
@@ -133,11 +145,23 @@ void HomeWidget::tim_phuong_an() {
                 ++cnt;
                 continue;
             }
-            MFCPP::Log::InfoPrint(fmt::format("{}x {}", ans[cnt], MFCPP::Database::getFood(food_entries[i].first).name));
+            if (ans[cnt] == 1) {
+                output += QString::fromStdString(fmt::format("{}x {} ({}k)\n", ans[cnt], MFCPP::Database::getFood(food_entries[i].first).name, MFCPP::Database::getFood(food_entries[i].first).price));
+                MFCPP::Log::InfoPrint(fmt::format("{}x {} ({}k)", ans[cnt], MFCPP::Database::getFood(food_entries[i].first).name, MFCPP::Database::getFood(food_entries[i].first).price));
+            }
+            else {
+                output += QString::fromStdString(fmt::format("{}x {} ({}*{}k)\n", ans[cnt], MFCPP::Database::getFood(food_entries[i].first).name, ans[cnt], MFCPP::Database::getFood(food_entries[i].first).price));
+                MFCPP::Log::InfoPrint(fmt::format("{}x {} ({}*{}k)", ans[cnt], MFCPP::Database::getFood(food_entries[i].first).name, ans[cnt], MFCPP::Database::getFood(food_entries[i].first).price));
+            }
             cost += ans[cnt] * MFCPP::Database::getFood(food_entries[i].first).price;
             ++cnt;
         }
+        output += QString::fromStdString(fmt::format("* Chi ph\303\255: {}k", cost));
         MFCPP::Log::InfoPrint(fmt::format("Price: {}k", cost));
+        QMessageBox::information(this, "Th\303\240nh c\303\264ng", output);
+    }
+    else {
+        QMessageBox::critical(this, "L\341\273\227i", "Kh\303\264ng th\341\273\203 t\303\254m th\341\272\245y t\341\273\221i \306\260u ph\303\271 h\341\273\243p, m\341\273\235i b\341\272\241n ch\341\273\215n l\341\272\241i");
     }
 
     reset_value();

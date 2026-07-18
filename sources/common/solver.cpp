@@ -95,7 +95,7 @@ void MFCPP::Solver::Generate(HighsModel &model, const Boundary& data) {
 
     for (int i = 0; i < food_entries.size(); ++i) {
         if (food_entries[i].first == FoodID::FOOD_NULL) continue;
-        model.lp_.col_cost_.push_back(Database::getFood(food_entries[i].first).price * Database::getFoodSelected(food_entries[i].first));
+        model.lp_.col_cost_.push_back(Database::getFood(food_entries[i].first).price);
     }
     //model.lp_.col_cost_ = {1.0, 1.0};
     for (int i = 0; i < food_entries.size(); ++i) {
