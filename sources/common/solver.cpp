@@ -129,10 +129,10 @@ void MFCPP::Solver::Generate(HighsModel &model, const Boundary& data) {
     //model.lp_.a_matrix_.index_ = {0, 1, 2, 0, 1, 2};
     for (int i = 0; i < food_entries.size(); ++i) {
         if (food_entries[i].first == FoodID::FOOD_NULL) continue;
-        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).kcal * Database::getFoodSelected(food_entries[i].first));
-        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).protein * Database::getFoodSelected(food_entries[i].first));
-        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).lipid * Database::getFoodSelected(food_entries[i].first));
-        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).carbohydrate * Database::getFoodSelected(food_entries[i].first));
+        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).kcal);
+        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).protein);
+        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).lipid);
+        model.lp_.a_matrix_.value_.push_back(Database::getFood(food_entries[i].first).carbohydrate);
     }
     //model.lp_.a_matrix_.value_ = {0.0, 1.0, 3.0, 1.0, 2.0, 2.0};
 }

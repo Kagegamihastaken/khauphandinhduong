@@ -7,11 +7,13 @@ class HomeWidget : public QWidget {
     Q_OBJECT
 public:
     explicit HomeWidget(QWidget *parent = nullptr);
-    ~HomeWidget();
+    ~HomeWidget() override;
 private slots:
     void calculate_dinhduong();
     void reset_value();
     void tim_phuong_an();
+    void remove_current_mon_chon();
+    void add_new_mon_an();
 private:
     Ui::Home* ui;
     //for class numeric
