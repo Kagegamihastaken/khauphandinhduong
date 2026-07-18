@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0069 NEW)
-project(khauphandinhduong VERSION 0.4)
+project(khauphandinhduong VERSION 0.4.1)
 
 add_compile_definitions(__USE_MINGW_ANSI_STDIO=1)
 
@@ -14,7 +14,7 @@ SET(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
 
 #program setting
-set(DEVELOPMENT_BUILD ON)
+set(DEVELOPMENT_BUILD OFF)
 set(LOGGING_ENABLE OFF)
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Static Libraries" FORCE)

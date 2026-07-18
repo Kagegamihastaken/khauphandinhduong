@@ -44,7 +44,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>C:/Users/dovie/Downloads/__almond_eye_umamusume_drawn_by_pof_peuplierpof__609df87ff01affd07403b6e3639c2d5e_cropped_1.png</pixmap>
+    <pixmap>image/icon_about.png</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="label">
