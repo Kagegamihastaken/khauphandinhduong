@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>377</width>
-    <height>304</height>
+    <height>315</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>377</width>
-    <height>304</height>
+    <height>315</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>377</width>
-    <height>304</height>
+    <height>315</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -77,7 +77,7 @@ Những thư viện được sử dụng trong dự án:</string>
      <x>10</x>
      <y>80</y>
      <width>351</width>
-     <height>121</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="text">
@@ -87,7 +87,8 @@ cpptrace (https://github.com/jeremy-rifkin/cpptrace.git)
 fmt (https://github.com/fmtlib/fmt.git)
 highs (https://github.com/ERGO-Code/HiGHS.git)
 JSON (https://github.com/nlohmann/json.git)
-magic_enum (https://github.com/Neargye/magic_enum.git)</string>
+magic_enum (https://github.com/Neargye/magic_enum.git)
+qt (https://qt.io/)</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
@@ -97,7 +98,7 @@ magic_enum (https://github.com/Neargye/magic_enum.git)</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>200</y>
+     <y>210</y>
      <width>361</width>
      <height>71</height>
     </rect>
@@ -120,7 +121,7 @@ Và cuối cùng, em cảm ơn thầy Nguyễn Ngọc Du đã hỗ trợ trong d
    <property name="geometry">
     <rect>
      <x>290</x>
-     <y>270</y>
+     <y>280</y>
      <width>75</width>
      <height>24</height>
     </rect>
