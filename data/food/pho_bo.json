@@ -4,5 +4,6 @@
 	"kcal": 550.0,
 	"protein": 30.0,
 	"lipid": 12.0,
-	"carbohydrate": 70.0
+	"carbohydrate": 70.0,
+	"price": 30.0
 }

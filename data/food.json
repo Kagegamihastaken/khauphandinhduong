@@ -5,6 +5,24 @@
 		},
 		{
 			"data_load": "food/pho_ga.json"
+		},
+		{
+			"data_load": "food/sup_ga.json"
+		},
+		{
+			"data_load": "food/banh_mi_trung_op_la.json"
+		},
+		{
+			"data_load": "food/banh_mi_thit_day_du.json"
+		},
+		{
+			"data_load": "food/banh_mi_heo_quay.json"
+		},
+		{
+			"data_load": "food/rau_muong.json"
+		},
+		{
+			"data_load": "food/bap_cai.json"
 		}
 	]
 }

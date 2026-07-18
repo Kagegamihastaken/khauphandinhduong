@@ -5,7 +5,13 @@
 enum class FoodID : uint16_t {
     FOOD_NULL,
     PHO_BO,
-    PHO_GA
+    PHO_GA,
+    SUP_GA,
+    BANH_MI_TRUNG_OP_LA,
+    BANH_MI_THIT_DAY_DU,
+    BANH_MI_HEO_QUAY,
+    RAU_MUONG,
+    BAP_CAI
 };
 
 #endif //KHAUPHANDINHDUONG_FOOD_ENUM_HPP
